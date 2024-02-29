@@ -117,9 +117,13 @@ body {
     resize: none;
   }
 
+  .error::placeholder {
+    color: red;
+  }
+
   .add-form-row {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .add-form-button {
