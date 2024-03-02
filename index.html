@@ -157,7 +157,7 @@
   // То же самое, что и выше, только для добавления коментария по нажатию "Enter"
   inputText.addEventListener("keyup", (event) => {
     if (event.key === "Enter") { // Проверяем, была ли нажата клавиша Enter
-      event.preventDefault(); // Предотвращаем выполнение действия по умолчанию (переход на новую строку)
+      // event.preventDefault(); // Предотвращаем выполнение действия по умолчанию (переход на новую строку)
 
       const oldCommentsBox = commentsBox.innerHTML;
       let likes = 0;
@@ -165,7 +165,8 @@
       inputName.classList.remove("error");
       inputText.classList.remove("error");
 
-      if (inputName.value.length === 0 || inputText.value.length === 0) {
+      if (inputName.value.length === 0 || inputText.value.length === 0 || inputText.value === '/n') {
+        inputText.value = '';
         inputName.classList.add("error");
         inputText.classList.add("error");
         return;
@@ -196,6 +197,10 @@
     }
   });
 
+  deleteButtonElement.addEventListener('click', () => {
+    const comments = document.querySelectorAll('.comment');
+    comments[comments.length - 1].remove();
+  })
 
 </script>
 </html>
