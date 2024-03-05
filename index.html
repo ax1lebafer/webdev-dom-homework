@@ -4,6 +4,7 @@
 <head>
   <title>Проект "Комменты"</title>
   <meta charset="utf-8" />
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -121,7 +122,8 @@
       const index = likeCommentButtonElement.dataset.index;
       let likesCounts = likeCommentButtonElement.dataset.likeCounts;
 
-      likeCommentButtonElement.addEventListener('click', () => {
+      likeCommentButtonElement.addEventListener('click', (event) => {
+        event.stopPropagation();
         if (!persons[index].isLiked) {
           likesCounts++;
           persons[index].likes = likesCounts;
@@ -145,6 +147,17 @@
       renderComments();
     })
   }
+
+  const initReplyToComment = () => {
+    const commentsBodyElements = document.querySelectorAll('.comment');
+    commentsBodyElements.forEach((comment, index) => {
+      comment.addEventListener('click', () => {
+        inputText.value = `> ${persons[index].comment} \n \n ${persons[index].name}, \n`;
+      })
+    })
+  }
+
+  initReplyToComment();
 
   // Создаем рендер функцию, для отрисовки контента из JS
   const renderComments = () => {
@@ -173,6 +186,7 @@
     commentsBox.innerHTML = commentsHtml;
 
     initLikeCommentListeners();
+    initReplyToComment();
   }
 
   initDeleteLastComentListener();
@@ -215,8 +229,16 @@
 
     // Добавляем данные о пользователе в исходный массив с данными о пользователях
     persons.push({
-      name: inputName.value,
-      comment: inputText.value,
+      name: inputName.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('&', '&amp;')
+        .replaceAll('"', '&quot;'),
+      comment: inputText.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('&', '&amp;')
+        .replaceAll('"', '&quot;'),
       date: nowDate,
       likes: 0,
       isLiked: false,
@@ -245,13 +267,19 @@
         return;
       }
 
-      if (inputText.value.includes('\n')) {
-        inputText.value = inputText.value.replace('\n', '');
-      }
 
       persons.push({
-        name: inputName.value,
-        comment: inputText.value,
+        name: inputName.value
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('&', '&amp;')
+          .replaceAll('"', '&quot;'),
+        comment: inputText.value
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('&', '&amp;')
+          .replaceAll('"', '&quot;')
+          .replaceAll('\n', ''),
         date: nowDate,
         likes: 0,
         isLiked: false,
@@ -266,13 +294,6 @@
       inputText.value = "";
     }
   });
-
-
-
-  // deleteButtonElement.addEventListener('click', () => {
-  //   const comments = document.querySelectorAll('.comment');
-  //   comments[comments.length - 1].remove();
-  // })
 
 </script>
 
