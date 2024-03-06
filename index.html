@@ -148,11 +148,12 @@
     })
   }
 
+  // Ответ на комментарий
   const initReplyToComment = () => {
     const commentsBodyElements = document.querySelectorAll('.comment');
     commentsBodyElements.forEach((comment, index) => {
       comment.addEventListener('click', () => {
-        inputText.value = `> ${persons[index].comment} \n \n ${persons[index].name}, \n`;
+        inputText.value = `QUOTE_BEGIN ${persons[index].name}: \n ${persons[index].comment} QUOTE_END \n`;
       })
     })
   }
@@ -170,7 +171,9 @@
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${person.comment}
+              ${person.comment
+              .replaceAll('QUOTE_BEGIN', '<div class="quote">')
+              .replaceAll('QUOTE_END', '</div>')}
             </div>
           </div>
           <div class="comment-footer">
@@ -232,12 +235,10 @@
       name: inputName.value
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
-        .replaceAll('&', '&amp;')
         .replaceAll('"', '&quot;'),
       comment: inputText.value
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
-        .replaceAll('&', '&amp;')
         .replaceAll('"', '&quot;'),
       date: nowDate,
       likes: 0,
@@ -272,12 +273,10 @@
         name: inputName.value
           .replaceAll('<', '&lt;')
           .replaceAll('>', '&gt;')
-          .replaceAll('&', '&amp;')
           .replaceAll('"', '&quot;'),
         comment: inputText.value
           .replaceAll('<', '&lt;')
           .replaceAll('>', '&gt;')
-          .replaceAll('&', '&amp;')
           .replaceAll('"', '&quot;')
           .replaceAll('\n', ''),
         date: nowDate,
