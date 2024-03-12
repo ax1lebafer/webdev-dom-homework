@@ -4,6 +4,7 @@
 <head>
   <title>Проект "Комменты"</title>
   <meta charset="utf-8" />
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -66,33 +67,34 @@
   const addButtonElement = document.querySelector(".add-form-button");
   const deleteButtonElement = document.querySelector(".delete-form-button");
 
-  // Объявляем глобальные переменные для работы с датой
-  const currentDate = new Date();
-  let date = currentDate.getDate();
-  let month = currentDate.getMonth() + 1; // тут я добавляю к месяцу 1, так как отсчет начинается с 0
-  let year = currentDate.getFullYear().toString().slice(2);
-  let hour = currentDate.getHours();
-  let minutes = currentDate.getMinutes();
+  // Функция для получения текущей даты
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    let date = currentDate.getDate();
+    let month = currentDate.getMonth() + 1; // тут я добавляю к месяцу 1, так как отсчет начинается с 0
+    let year = currentDate.getFullYear().toString().slice(2);
+    let hour = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
 
-  // Добавляем вперед нули, чтобы выглядело красиво
-  if (date <= 9) {
-    date = "0" + date;
+    // Добавляем вперед нули, чтобы выглядело красиво
+    if (date <= 9) {
+      date = "0" + date;
+    }
+
+    if (month <= 9) {
+      month = "0" + month;
+    }
+
+    if (hour <= 9) {
+      hour = "0" + hour;
+    }
+
+    if (minutes <= 9) {
+      minutes = "0" + minutes;
+    }
+
+    return `${date}.${month}.${year} ${hour}:${minutes}`;
   }
-
-  if (month <= 9) {
-    month = "0" + month;
-  }
-
-  if (hour <= 9) {
-    hour = "0" + hour;
-  }
-
-  if (minutes <= 9) {
-    minutes = "0" + minutes;
-  }
-
-  // Создаю константу, для нашего верного отображения временив публикации коментов
-  const nowDate = `${date}.${month}.${year} ${hour}:${minutes}`;
 
   // Храним информацию о пользователях в массиве
   const persons = [
@@ -121,7 +123,8 @@
       const index = likeCommentButtonElement.dataset.index;
       let likesCounts = likeCommentButtonElement.dataset.likeCounts;
 
-      likeCommentButtonElement.addEventListener('click', () => {
+      likeCommentButtonElement.addEventListener('click', (event) => {
+        event.stopPropagation();
         if (!persons[index].isLiked) {
           likesCounts++;
           persons[index].likes = likesCounts;
@@ -146,6 +149,18 @@
     })
   }
 
+  // Ответ на комментарий
+  const initReplyToComment = () => {
+    const commentsBodyElements = document.querySelectorAll('.comment');
+    commentsBodyElements.forEach((comment, index) => {
+      comment.addEventListener('click', () => {
+        inputText.value = `QUOTE_BEGIN ${persons[index].name}: \n ${persons[index].comment} QUOTE_END \n`;
+      })
+    })
+  }
+
+  initReplyToComment();
+
   // Создаем рендер функцию, для отрисовки контента из JS
   const renderComments = () => {
     const commentsHtml = persons
@@ -157,7 +172,9 @@
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${person.comment}
+              ${person.comment
+            .replaceAll('QUOTE_BEGIN', '<div class="quote">')
+            .replaceAll('QUOTE_END', '</div>')}
             </div>
           </div>
           <div class="comment-footer">
@@ -173,6 +190,8 @@
     commentsBox.innerHTML = commentsHtml;
 
     initLikeCommentListeners();
+    initReplyToComment();
+    getCurrentDate();
   }
 
   initDeleteLastComentListener();
@@ -207,7 +226,7 @@
     inputName.classList.remove("error");
     inputText.classList.remove("error");
 
-    if (inputName.value.length === 0 || inputText.value.length === 0) {
+    if (inputName.value.trim().length === 0 || inputText.value.trim().length === 0) {
       inputName.classList.add("error");
       inputText.classList.add("error");
       return;
@@ -215,9 +234,15 @@
 
     // Добавляем данные о пользователе в исходный массив с данными о пользователях
     persons.push({
-      name: inputName.value,
-      comment: inputText.value,
-      date: nowDate,
+      name: inputName.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;'),
+      comment: inputText.value
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;'),
+      date: getCurrentDate(),
       likes: 0,
       isLiked: false,
     })
@@ -238,21 +263,25 @@
       inputName.classList.remove("error");
       inputText.classList.remove("error");
 
-      if (inputName.value.length === 0 || inputText.value.length === 0 || inputText.value === '\n') {
+      if (inputName.value.trim().length === 0 || inputText.value.trim().length === 0 || inputText.value === '\n') {
         inputText.value = '';
         inputName.classList.add("error");
         inputText.classList.add("error");
         return;
       }
 
-      if (inputText.value.includes('\n')) {
-        inputText.value = inputText.value.replace('\n', '');
-      }
 
       persons.push({
-        name: inputName.value,
-        comment: inputText.value,
-        date: nowDate,
+        name: inputName.value
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;'),
+        comment: inputText.value
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll('\n', ''),
+        date: getCurrentDate(),
         likes: 0,
         isLiked: false,
       })
@@ -266,13 +295,6 @@
       inputText.value = "";
     }
   });
-
-
-
-  // deleteButtonElement.addEventListener('click', () => {
-  //   const comments = document.querySelectorAll('.comment');
-  //   comments[comments.length - 1].remove();
-  // })
 
 </script>
 
