@@ -97,22 +97,73 @@
   }
 
   // Храним информацию о пользователях в массиве
-  const persons = [
-    {
-      name: 'Глеб Фокин',
-      comment: 'Это будет первый комментарий на этой странице',
-      date: '12.02.22 12:18',
-      likes: 3,
-      isLiked: false,
-    },
-    {
-      name: 'Варвара Н.',
-      comment: 'Мне нравится как оформлена эта страница! ❤',
-      date: '13.02.22 19:22',
-      likes: 74,
-      isLiked: false,
-    },
-  ];
+  let persons = [];
+
+  // Подключаю БД с API
+  const getCommentsInfo = () => {
+    const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+      method: 'GET',
+    })
+
+    fetchPromise.then((repsonse) => {
+      const jsonPromise = repsonse.json();
+
+      jsonPromise.then((repsonseData) => {
+
+        // Преобразую в нужный мне формат данные с API
+        const appComments = repsonseData.comments.map((comment) => {
+
+          // Преобразую дату в нужный мне вид
+          const formatDate = (apiDate) => {
+            const date = new Date(apiDate);
+            const options = {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            }
+            return date.toLocaleString('ru', options).replace(',', '');
+          }
+
+          const apiDate = comment.date;
+          const formattedDate = formatDate(apiDate);
+
+          return {
+            name: comment.author.name,
+            comment: comment.text,
+            date: formattedDate,
+            likes: comment.likes,
+            isLiked: comment.isLiked,
+          }
+        })
+
+        persons = appComments;
+        renderComments();
+      })
+    })
+  }
+
+  getCommentsInfo();
+
+  // Функция для добавления данных о пользователе в БД API
+  const postCommentInfo = () => {
+    const fetchPromisePost = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+      method: 'POST',
+      body: JSON.stringify({
+        text: inputText.value,
+        name: inputName.value,
+      })
+    })
+
+    fetchPromisePost.then((response) => {
+      const jsonPromise = response.json();
+
+      jsonPromise.then((responseData) => {
+        getCommentsInfo();
+      })
+    })
+  }
 
   // Создаем функцию лайка на каждом коментарии
   const initLikeCommentListeners = () => {
@@ -232,23 +283,8 @@
       return;
     }
 
-    // Добавляем данные о пользователе в исходный массив с данными о пользователях
-    persons.push({
-      name: inputName.value
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;'),
-      comment: inputText.value
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;'),
-      date: getCurrentDate(),
-      likes: 0,
-      isLiked: false,
-    })
+    postCommentInfo();
 
-    // Проверяю, работает ли код
-    console.log(persons);
     // Вызываем рендер функцию для отрисовки нового коментария
     renderComments();
 
@@ -270,21 +306,7 @@
         return;
       }
 
-
-      persons.push({
-        name: inputName.value
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;')
-          .replaceAll('"', '&quot;'),
-        comment: inputText.value
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;')
-          .replaceAll('"', '&quot;')
-          .replaceAll('\n', ''),
-        date: getCurrentDate(),
-        likes: 0,
-        isLiked: false,
-      })
+      postCommentInfo();
 
       // Проверяю, работает ли код
       console.log(persons);
