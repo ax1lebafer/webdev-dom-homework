@@ -146,13 +146,21 @@
 
   getCommentsInfo();
 
+  // Функция для предовращения уязвимости
+  const vulnerabilityPrevention = (string) => {
+    return string
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+  }
+
   // Функция для добавления данных о пользователе в БД API
   const postCommentInfo = () => {
     const fetchPromisePost = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'POST',
       body: JSON.stringify({
-        text: inputText.value,
-        name: inputName.value,
+        text: vulnerabilityPrevention(inputText.value),
+        name: vulnerabilityPrevention(inputName.value),
       })
     })
 
