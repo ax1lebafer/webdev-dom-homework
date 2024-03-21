@@ -104,11 +104,10 @@
     const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'GET',
     })
-
-    fetchPromise.then((repsonse) => {
-      const jsonPromise = repsonse.json();
-
-      jsonPromise.then((repsonseData) => {
+      .then((repsonse) => {
+        return repsonse.json();
+      })
+      .then((repsonseData) => {
 
         // Преобразую в нужный мне формат данные с API
         const appComments = repsonseData.comments.map((comment) => {
@@ -141,7 +140,6 @@
         persons = appComments;
         renderComments();
       })
-    })
   }
 
   getCommentsInfo();
@@ -156,20 +154,18 @@
 
   // Функция для добавления данных о пользователе в БД API
   const postCommentInfo = () => {
-    const fetchPromisePost = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+    fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'POST',
       body: JSON.stringify({
         text: vulnerabilityPrevention(inputText.value),
         name: vulnerabilityPrevention(inputName.value),
       })
     })
-
-    fetchPromisePost.then((response) => {
-      const jsonPromise = response.json();
-
-      jsonPromise.then((responseData) => {
-        getCommentsInfo();
-      })
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      getCommentsInfo();
     })
   }
 
