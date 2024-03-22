@@ -10,6 +10,25 @@
 
 <body>
   <div class="container">
+    <div class="list-loader-get">
+      <div class="windows8">
+        <div class="wBall" id="wBall_1">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_2">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_3">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_4">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_5">
+          <div class="wInnerBall"></div>
+        </div>
+      </div>
+    </div>
     <ul class="comments">
       <!-- Список коментариев рендерится из JS -->
       <!-- <li class="comment">
@@ -55,6 +74,25 @@
         <button class="add-form-button delete-form-button">Удалить последний коментарий</button>
       </div>
     </div>
+    <div class="list-loader-post hidden">
+      <div class="windows8">
+        <div class="wBall" id="wBall_1">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_2">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_3">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_4">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_5">
+          <div class="wInnerBall"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 
@@ -66,6 +104,7 @@
   const inputText = document.querySelector(".add-form-text");
   const addButtonElement = document.querySelector(".add-form-button");
   const deleteButtonElement = document.querySelector(".delete-form-button");
+  const addFormElement = document.querySelector('.add-form');
 
   // Функция для получения текущей даты
   const getCurrentDate = () => {
@@ -99,8 +138,31 @@
   // Храним информацию о пользователях в массиве
   let persons = [];
 
+  // Функция добавляет лоадер загрузки комментариев
+  const showListLoaderGet = () => {
+    const listLoader = document.querySelector('.list-loader-get');
+    listLoader.classList.remove('hidden');
+  }
+
+  // Функция удаляет лоадер загрузки комментариев
+  const hideListLoaderGet = () => {
+    const listLoader = document.querySelector('.list-loader-get');
+    listLoader.classList.add('hidden');
+  }
+
+  // Функция добавляет лоадер отправки комментария
+  const showListLoaderPost = () => {
+    const listLoader = document.querySelector('.list-loader-post');
+  }
+
+  // Функция удаляет лоадер отправки комментария
+  const hideListLoaderPost = () => {
+    const listLoader = document.querySelector('.list-loader-post');
+  }
+
   // Подключаю БД с API
   const getCommentsInfo = () => {
+    showListLoaderGet();
     const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'GET',
     })
@@ -140,6 +202,10 @@
         persons = appComments;
         renderComments();
       })
+      .then((response) => {
+        hideListLoaderGet();
+        return response;
+      })
   }
 
   getCommentsInfo();
@@ -161,12 +227,18 @@
         name: vulnerabilityPrevention(inputName.value),
       })
     })
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
-      getCommentsInfo();
-    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        return getCommentsInfo();
+      })
+      .then((response) => {
+        // hideListLoaderPost();
+        addButtonElement.disabled = true;
+        addButtonElement.textContent = 'Написать';
+        return response;
+      })
   }
 
   // Создаем функцию лайка на каждом коментарии
@@ -277,6 +349,11 @@
   // Если валидация пройдена, коментарий добавиться в ленту по нажатию мышкой на кнопку
   // После того, как коментарий опубликуется, произойдет очистка полей
   addButtonElement.addEventListener("click", () => {
+
+    // showListLoaderPost();
+
+    addButtonElement.disabled = true;
+    addButtonElement.textContent = 'Комментарий добавляется...';
 
     inputName.classList.remove("error");
     inputText.classList.remove("error");
