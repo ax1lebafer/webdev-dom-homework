@@ -160,10 +160,15 @@
     const listLoader = document.querySelector('.list-loader-post');
   }
 
+  let isLoading = false;
+
   // Подключаю БД с API
   const getCommentsInfo = () => {
-    showListLoaderGet();
-    const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+    if (!isLoading) {
+      showListLoaderGet();
+    }
+
+    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'GET',
     })
       .then((repsonse) => {
@@ -200,11 +205,12 @@
         })
 
         persons = appComments;
+        console.log('Рендерится комментарий');
         renderComments();
       })
-      .then((response) => {
+      .then(() => {
         hideListLoaderGet();
-        return response;
+        isLoading = true;
       })
   }
 
@@ -220,7 +226,7 @@
 
   // Функция для добавления данных о пользователе в БД API
   const postCommentInfo = () => {
-    fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'POST',
       body: JSON.stringify({
         text: vulnerabilityPrevention(inputText.value),
@@ -232,12 +238,6 @@
       })
       .then((responseData) => {
         return getCommentsInfo();
-      })
-      .then((response) => {
-        // hideListLoaderPost();
-        addButtonElement.disabled = true;
-        addButtonElement.textContent = 'Написать';
-        return response;
       })
   }
 
@@ -364,10 +364,13 @@
       return;
     }
 
-    postCommentInfo();
+    postCommentInfo().then(() => {
+      addButtonElement.disabled = true;
+      addButtonElement.textContent = 'Написать';
+    });
 
     // Вызываем рендер функцию для отрисовки нового коментария
-    renderComments();
+    // renderComments();
 
     inputName.value = "";
     inputText.value = "";
@@ -376,6 +379,9 @@
   // То же самое, что и выше, только для добавления коментария по нажатию "Enter"
   inputText.addEventListener("keyup", (event) => {
     if (event.key === "Enter") { // Проверяем, была ли нажата клавиша Enter
+
+      addButtonElement.disabled = true;
+      addButtonElement.textContent = 'Комментарий добавляется...';
 
       inputName.classList.remove("error");
       inputText.classList.remove("error");
@@ -387,7 +393,10 @@
         return;
       }
 
-      postCommentInfo();
+      postCommentInfo().then(() => {
+      addButtonElement.disabled = true;
+      addButtonElement.textContent = 'Написать';
+    });
 
       // Проверяю, работает ли код
       console.log(persons);
