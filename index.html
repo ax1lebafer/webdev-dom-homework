@@ -153,11 +153,13 @@
   // Функция добавляет лоадер отправки комментария
   const showListLoaderPost = () => {
     const listLoader = document.querySelector('.list-loader-post');
+    listLoader.classList.remove('hidden');
   }
 
   // Функция удаляет лоадер отправки комментария
   const hideListLoaderPost = () => {
     const listLoader = document.querySelector('.list-loader-post');
+    listLoader.classList.add('hidden');
   }
 
   let isLoading = false;
@@ -351,9 +353,11 @@
   addButtonElement.addEventListener("click", () => {
 
     // showListLoaderPost();
+    addFormElement.style.display = 'none';
+    showListLoaderPost();
 
-    addButtonElement.disabled = true;
-    addButtonElement.textContent = 'Комментарий добавляется...';
+    // addButtonElement.disabled = true;
+    // addButtonElement.textContent = 'Комментарий добавляется...';
 
     inputName.classList.remove("error");
     inputText.classList.remove("error");
@@ -365,8 +369,11 @@
     }
 
     postCommentInfo().then(() => {
-      addButtonElement.disabled = true;
-      addButtonElement.textContent = 'Написать';
+      // addButtonElement.disabled = true;
+      // addButtonElement.textContent = 'Написать';
+
+      addFormElement.style.display = 'flex';
+      hideListLoaderPost();
     });
 
     // Вызываем рендер функцию для отрисовки нового коментария
@@ -380,8 +387,11 @@
   inputText.addEventListener("keyup", (event) => {
     if (event.key === "Enter") { // Проверяем, была ли нажата клавиша Enter
 
-      addButtonElement.disabled = true;
-      addButtonElement.textContent = 'Комментарий добавляется...';
+      // addButtonElement.disabled = true;
+      // addButtonElement.textContent = 'Комментарий добавляется...';
+
+      addFormElement.style.display = 'none';
+      showListLoaderPost();
 
       inputName.classList.remove("error");
       inputText.classList.remove("error");
@@ -394,9 +404,12 @@
       }
 
       postCommentInfo().then(() => {
-      addButtonElement.disabled = true;
-      addButtonElement.textContent = 'Написать';
-    });
+        // addButtonElement.disabled = true;
+        // addButtonElement.textContent = 'Написать';
+
+        addFormElement.style.display = 'flex';
+        hideListLoaderPost();
+      });
 
       // Проверяю, работает ли код
       console.log(persons);

@@ -500,3 +500,7 @@ body {
   .add-form-button:hover {
     opacity: 0.9;
   }
+
+  .list-loader-post {
+    margin-top: 50px;
+  }
