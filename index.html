@@ -10,6 +10,25 @@
 
 <body>
   <div class="container">
+    <div class="list-loader-get">
+      <div class="windows8">
+        <div class="wBall" id="wBall_1">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_2">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_3">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_4">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_5">
+          <div class="wInnerBall"></div>
+        </div>
+      </div>
+    </div>
     <ul class="comments">
       <!-- Список коментариев рендерится из JS -->
       <!-- <li class="comment">
@@ -55,6 +74,25 @@
         <button class="add-form-button delete-form-button">Удалить последний коментарий</button>
       </div>
     </div>
+    <div class="list-loader-post hidden">
+      <div class="windows8">
+        <div class="wBall" id="wBall_1">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_2">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_3">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_4">
+          <div class="wInnerBall"></div>
+        </div>
+        <div class="wBall" id="wBall_5">
+          <div class="wInnerBall"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 
@@ -66,6 +104,7 @@
   const inputText = document.querySelector(".add-form-text");
   const addButtonElement = document.querySelector(".add-form-button");
   const deleteButtonElement = document.querySelector(".delete-form-button");
+  const addFormElement = document.querySelector('.add-form');
 
   // Функция для получения текущей даты
   const getCurrentDate = () => {
@@ -99,16 +138,45 @@
   // Храним информацию о пользователях в массиве
   let persons = [];
 
+  // Функция добавляет лоадер загрузки комментариев
+  const showListLoaderGet = () => {
+    const listLoader = document.querySelector('.list-loader-get');
+    listLoader.classList.remove('hidden');
+  }
+
+  // Функция удаляет лоадер загрузки комментариев
+  const hideListLoaderGet = () => {
+    const listLoader = document.querySelector('.list-loader-get');
+    listLoader.classList.add('hidden');
+  }
+
+  // Функция добавляет лоадер отправки комментария
+  const showListLoaderPost = () => {
+    const listLoader = document.querySelector('.list-loader-post');
+    listLoader.classList.remove('hidden');
+  }
+
+  // Функция удаляет лоадер отправки комментария
+  const hideListLoaderPost = () => {
+    const listLoader = document.querySelector('.list-loader-post');
+    listLoader.classList.add('hidden');
+  }
+
+  let isLoading = false;
+
   // Подключаю БД с API
   const getCommentsInfo = () => {
-    const fetchPromise = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+    if (!isLoading) {
+      showListLoaderGet();
+    }
+
+    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'GET',
     })
-
-    fetchPromise.then((repsonse) => {
-      const jsonPromise = repsonse.json();
-
-      jsonPromise.then((repsonseData) => {
+      .then((repsonse) => {
+        return repsonse.json();
+      })
+      .then((repsonseData) => {
 
         // Преобразую в нужный мне формат данные с API
         const appComments = repsonseData.comments.map((comment) => {
@@ -139,9 +207,13 @@
         })
 
         persons = appComments;
+        console.log('Рендерится комментарий');
         renderComments();
       })
-    })
+      .then(() => {
+        hideListLoaderGet();
+        isLoading = true;
+      })
   }
 
   getCommentsInfo();
@@ -156,21 +228,19 @@
 
   // Функция для добавления данных о пользователе в БД API
   const postCommentInfo = () => {
-    const fetchPromisePost = fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
+    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
       method: 'POST',
       body: JSON.stringify({
         text: vulnerabilityPrevention(inputText.value),
         name: vulnerabilityPrevention(inputName.value),
       })
     })
-
-    fetchPromisePost.then((response) => {
-      const jsonPromise = response.json();
-
-      jsonPromise.then((responseData) => {
-        getCommentsInfo();
+      .then((response) => {
+        return response.json();
       })
-    })
+      .then((responseData) => {
+        return getCommentsInfo();
+      })
   }
 
   // Создаем функцию лайка на каждом коментарии
@@ -282,6 +352,13 @@
   // После того, как коментарий опубликуется, произойдет очистка полей
   addButtonElement.addEventListener("click", () => {
 
+    // showListLoaderPost();
+    addFormElement.style.display = 'none';
+    showListLoaderPost();
+
+    // addButtonElement.disabled = true;
+    // addButtonElement.textContent = 'Комментарий добавляется...';
+
     inputName.classList.remove("error");
     inputText.classList.remove("error");
 
@@ -291,10 +368,16 @@
       return;
     }
 
-    postCommentInfo();
+    postCommentInfo().then(() => {
+      // addButtonElement.disabled = true;
+      // addButtonElement.textContent = 'Написать';
+
+      addFormElement.style.display = 'flex';
+      hideListLoaderPost();
+    });
 
     // Вызываем рендер функцию для отрисовки нового коментария
-    renderComments();
+    // renderComments();
 
     inputName.value = "";
     inputText.value = "";
@@ -303,6 +386,12 @@
   // То же самое, что и выше, только для добавления коментария по нажатию "Enter"
   inputText.addEventListener("keyup", (event) => {
     if (event.key === "Enter") { // Проверяем, была ли нажата клавиша Enter
+
+      // addButtonElement.disabled = true;
+      // addButtonElement.textContent = 'Комментарий добавляется...';
+
+      addFormElement.style.display = 'none';
+      showListLoaderPost();
 
       inputName.classList.remove("error");
       inputText.classList.remove("error");
@@ -314,7 +403,13 @@
         return;
       }
 
-      postCommentInfo();
+      postCommentInfo().then(() => {
+        // addButtonElement.disabled = true;
+        // addButtonElement.textContent = 'Написать';
+
+        addFormElement.style.display = 'flex';
+        hideListLoaderPost();
+      });
 
       // Проверяю, работает ли код
       console.log(persons);
