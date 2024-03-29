@@ -1,3 +1,5 @@
+import { getComments, postComment } from "./api.js";
+
 // Объявляем глобальные константы для всего проекта
 const commentsBox = document.querySelector(".comments");
 const inputName = document.querySelector(".add-form-name");
@@ -70,16 +72,7 @@ const getCommentsInfo = () => {
         showListLoaderGet();
     }
 
-    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
-        method: 'GET',
-    })
-        .then((response) => {
-            if (response.status === 500) {
-                throw new Error('Сервер сломался, попробуй позже');
-            }
-
-            return response.json();
-        })
+    getComments()
         .then((responseData) => {
 
             // Преобразую в нужный мне формат данные с API
@@ -128,38 +121,14 @@ const getCommentsInfo = () => {
 
 getCommentsInfo();
 
-// Функция для предовращения уязвимости
-const vulnerabilityPrevention = (string) => {
-    return string
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-}
 
 // Функция для добавления данных о пользователе в БД API
 const postCommentInfo = () => {
-    return fetch('https://wedev-api.sky.pro/api/v1/raul-karabalin/comments', {
-        method: 'POST',
-        body: JSON.stringify({
-            text: vulnerabilityPrevention(inputText.value),
-            name: vulnerabilityPrevention(inputName.value),
-            forceError: true,
-        })
+    postComment({
+        inputText: inputText.value,
+        inputName: inputName.value
     })
-        .then((response) => {
-            console.log(`${response.status} ошибка сервера`);
-
-            if (response.status === 400) {
-                throw new Error('Имя и комментарий должны быть не короче 3 символов');
-            }
-
-            if (response.status === 500) {
-                throw new Error('Сервер сломался, попробуй позже');
-            }
-
-            return response.json();
-        })
-        .then((responseData) => {
+        .then(() => {
             inputName.value = "";
             inputText.value = "";
             return getCommentsInfo();
