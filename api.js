@@ -1,7 +1,7 @@
-import { vulnerabilityPrevention } from "./vulnerabilityPrevention.js";
+// import * as ddd from "./prototypes.js";
 
 // Получение комментариев с API
-export const getComments = () => {
+export function getComments() {
   return fetch("https://wedev-api.sky.pro/api/v1/raul-karabalin/comments", {
     method: "GET",
   }).then((response) => {
@@ -11,15 +11,15 @@ export const getComments = () => {
 
     return response.json();
   });
-};
+}
 
 // Публикация комментария в API
-export const postComment = ({ inputText, inputName }) => {
+export function postComment({ inputText, inputName }) {
   return fetch("https://wedev-api.sky.pro/api/v1/raul-karabalin/comments", {
     method: "POST",
     body: JSON.stringify({
-      text: vulnerabilityPrevention(inputText),
-      name: vulnerabilityPrevention(inputName),
+      text: inputText,
+      name: inputName,
       forceError: true,
     }),
   }).then((response) => {
@@ -35,4 +35,4 @@ export const postComment = ({ inputText, inputName }) => {
 
     return response.json();
   });
-};
+}

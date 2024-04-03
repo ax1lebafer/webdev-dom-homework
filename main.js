@@ -1,14 +1,14 @@
 import { getComments, postComment } from "./api.js";
-import { getCurrentDate } from "./getCurrentDate.js";
 import {
   showListLoaderGet,
   hideListLoaderGet,
   showListLoaderPost,
   hideListLoaderPost,
 } from "./loaders.js";
+import { initReplyToComment } from "./initFunctions.js";
+import { renderComments } from "./renderComments.js";
 
 // Объявляем глобальные константы для всего проекта
-const commentsBox = document.querySelector(".comments");
 const inputName = document.querySelector(".add-form-name");
 const inputText = document.querySelector(".add-form-text");
 const addButtonElement = document.querySelector(".add-form-button");
@@ -16,7 +16,7 @@ const deleteButtonElement = document.querySelector(".delete-form-button");
 const addFormElement = document.querySelector(".add-form");
 
 // Храним информацию о пользователях в массиве
-let persons = [];
+export let persons = [];
 
 let isLoading = false;
 
@@ -30,21 +30,8 @@ const getCommentsInfo = () => {
     .then((responseData) => {
       // Преобразую в нужный мне формат данные с API
       const appComments = responseData.comments.map((comment) => {
-        // Преобразую дату в нужный мне вид
-        const formatDate = (apiDate) => {
-          const date = new Date(apiDate);
-          const options = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-          };
-          return date.toLocaleString("ru", options).replace(",", "");
-        };
-
         const apiDate = comment.date;
-        const formattedDate = formatDate(apiDate);
+        const formattedDate = new Date(apiDate).format();
 
         return {
           name: comment.author.name,
@@ -56,7 +43,7 @@ const getCommentsInfo = () => {
       });
 
       persons = appComments;
-      renderComments();
+      renderComments({ persons, initReplyToCommentWithoutParams });
     })
     .then(() => {
       hideListLoaderGet();
@@ -76,8 +63,8 @@ getCommentsInfo();
 // Функция для добавления данных о пользователе в БД API
 const postCommentInfo = () => {
   return postComment({
-    inputText: inputText.value,
-    inputName: inputName.value,
+    inputText: inputText.value.vulnerabilityPrevention(),
+    inputName: inputName.value.vulnerabilityPrevention(),
   })
     .then(() => {
       inputName.value = "";
@@ -93,91 +80,22 @@ const postCommentInfo = () => {
     });
 };
 
-// Создаем функцию лайка на каждом коментарии
-const initLikeCommentListeners = () => {
-  const likeCommentButtonsElements = document.querySelectorAll(".like-button");
-
-  for (const likeCommentButtonElement of likeCommentButtonsElements) {
-    const index = likeCommentButtonElement.dataset.index;
-    let likesCounts = likeCommentButtonElement.dataset.likeCounts;
-
-    likeCommentButtonElement.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (!persons[index].isLiked) {
-        likesCounts++;
-        persons[index].likes = likesCounts;
-        persons[index].isLiked = true;
-      } else {
-        likesCounts--;
-        persons[index].likes = likesCounts;
-        persons[index].isLiked = false;
-      }
-
-      renderComments();
-    });
-  }
-};
-
 // Удаление последнего коментария посредством удаления последнего элемента из массива
 const initDeleteLastComentListener = () => {
   deleteButtonElement.addEventListener("click", () => {
     persons.pop();
 
-    renderComments();
+    renderComments({ persons, initReplyToCommentWithoutParams });
   });
 };
 
-// Ответ на комментарий
-const initReplyToComment = () => {
-  const commentsBodyElements = document.querySelectorAll(".comment");
-  commentsBodyElements.forEach((comment, index) => {
-    comment.addEventListener("click", () => {
-      inputText.value = `QUOTE_BEGIN ${persons[index].name}: \n ${persons[index].comment} QUOTE_END \n`;
-    });
-  });
-};
+function initReplyToCommentWithoutParams() {
+  initReplyToComment({ persons, inputText });
+}
 
-initReplyToComment();
-
-// Создаем рендер функцию, для отрисовки контента из JS
-const renderComments = () => {
-  const commentsHtml = persons
-    .map((person, index) => {
-      return `<li class="comment">
-        <div class="comment-header">
-          <div>${person.name}</div>
-          <div>${person.date}</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">
-            ${person.comment
-              .replaceAll("QUOTE_BEGIN", '<div class="quote">')
-              .replaceAll("QUOTE_END", "</div>")}
-          </div>
-        </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${person.likes}</span>
-            <button data-index="${index}" data-like-counts="${
-        person.likes
-      }" class="like-button ${
-        persons[index].isLiked ? "-active-like" : ""
-      }"></button>
-          </div>
-        </div>
-      </li>`;
-    })
-    .join("");
-
-  commentsBox.innerHTML = commentsHtml;
-
-  initLikeCommentListeners();
-  initReplyToComment();
-  getCurrentDate();
-};
-
+initReplyToCommentWithoutParams()
 initDeleteLastComentListener();
-renderComments();
+renderComments({ persons, initReplyToCommentWithoutParams });
 
 // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
 // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
@@ -207,10 +125,7 @@ addButtonElement.addEventListener("click", () => {
   inputName.classList.remove("error");
   inputText.classList.remove("error");
 
-  if (
-    inputName.value.trim().length === 0 ||
-    inputText.value.trim().length === 0
-  ) {
+  if (inputName.value.isEmpty() || inputText.value.isEmpty()) {
     inputText.value = "";
     inputName.value = "";
     inputName.classList.add("error");
@@ -236,8 +151,8 @@ inputText.addEventListener("keyup", (event) => {
     inputText.classList.remove("error");
 
     if (
-      inputName.value.trim().length === 0 ||
-      inputText.value.trim().length === 0 ||
+      inputName.value.isEmpty() ||
+      inputText.value.isEmpty() ||
       inputText.value === "\n"
     ) {
       inputText.value = "";
@@ -256,6 +171,6 @@ inputText.addEventListener("keyup", (event) => {
     });
 
     // Вызываем рендер функцию для отрисовки нового коментария
-    renderComments();
+    renderComments({ persons, initReplyToCommentWithoutParams });
   }
 });
