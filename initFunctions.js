@@ -18,7 +18,7 @@ export function initLikeCommentListeners({ persons, renderComments }) {
         persons[index].isLiked = false;
       }
 
-      renderComments({ persons, initLikeCommentListeners, initReplyToComment });
+      renderComments({ persons });
     });
   }
 }

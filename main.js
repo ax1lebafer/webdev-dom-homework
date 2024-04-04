@@ -10,7 +10,7 @@ import { renderComments } from "./renderComments.js";
 
 // Объявляем глобальные константы для всего проекта
 const inputName = document.querySelector(".add-form-name");
-const inputText = document.querySelector(".add-form-text");
+export const inputText = document.querySelector(".add-form-text");
 const addButtonElement = document.querySelector(".add-form-button");
 const deleteButtonElement = document.querySelector(".delete-form-button");
 const addFormElement = document.querySelector(".add-form");
@@ -85,17 +85,16 @@ const initDeleteLastComentListener = () => {
   deleteButtonElement.addEventListener("click", () => {
     persons.pop();
 
-    renderComments({ persons, initReplyToCommentWithoutParams });
+    renderComments({ persons });
   });
 };
 
-function initReplyToCommentWithoutParams() {
+export function initReplyToCommentWithoutParams() {
   initReplyToComment({ persons, inputText });
 }
 
 initReplyToCommentWithoutParams()
 initDeleteLastComentListener();
-renderComments({ persons, initReplyToCommentWithoutParams });
 
 // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
 // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
