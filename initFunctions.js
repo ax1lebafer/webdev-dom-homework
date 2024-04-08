@@ -32,3 +32,14 @@ export function initReplyToComment({ persons, inputText }) {
     });
   });
 }
+
+// Удаление последнего коментария посредством удаления последнего элемента из массива
+export function initDeleteLastComentListener({ persons, renderComments }) {
+  const deleteButtonElement = document.querySelector(".delete-form-button");
+
+  deleteButtonElement.addEventListener("click", () => {
+    persons.pop();
+
+    renderComments({ persons });
+  });
+}

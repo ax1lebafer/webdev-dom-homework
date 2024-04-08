@@ -5,14 +5,16 @@ import {
   showListLoaderPost,
   hideListLoaderPost,
 } from "./loaders.js";
-import { initReplyToComment } from "./initFunctions.js";
+import {
+  initReplyToComment,
+  initDeleteLastComentListener,
+} from "./initFunctions.js";
 import { renderComments } from "./renderComments.js";
 
 // Объявляем глобальные константы для всего проекта
 const inputName = document.querySelector(".add-form-name");
 export const inputText = document.querySelector(".add-form-text");
 const addButtonElement = document.querySelector(".add-form-button");
-const deleteButtonElement = document.querySelector(".delete-form-button");
 const addFormElement = document.querySelector(".add-form");
 
 // Храним информацию о пользователях в массиве
@@ -44,6 +46,7 @@ const getCommentsInfo = () => {
 
       persons = appComments;
       renderComments({ persons, initReplyToCommentWithoutParams });
+      initDeleteLastComentListener({ persons, renderComments });
     })
     .then(() => {
       hideListLoaderGet();
@@ -80,21 +83,11 @@ const postCommentInfo = () => {
     });
 };
 
-// Удаление последнего коментария посредством удаления последнего элемента из массива
-const initDeleteLastComentListener = () => {
-  deleteButtonElement.addEventListener("click", () => {
-    persons.pop();
-
-    renderComments({ persons });
-  });
-};
-
 export function initReplyToCommentWithoutParams() {
   initReplyToComment({ persons, inputText });
 }
 
-initReplyToCommentWithoutParams()
-initDeleteLastComentListener();
+initReplyToCommentWithoutParams();
 
 // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
 // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
