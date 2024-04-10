@@ -1,12 +1,13 @@
 import * as ddd from "./prototypes.js";
 import {
   initLikeCommentListeners,
+  initReplyToComment
 } from "./initFunctions.js";
 
 // Рендер комментариев
 const commentsBox = document.querySelector(".comments");
 
-export function renderComments({ persons }) {
+export function renderComments({ persons, inputText }) {
   const commentsHtml = persons
     .map((person, index) => {
       return `<li class="comment">
@@ -35,5 +36,6 @@ export function renderComments({ persons }) {
 
   commentsBox.innerHTML = commentsHtml;
 
-  initLikeCommentListeners({ persons, renderComments });
+  initLikeCommentListeners({ persons, renderComments, inputText });
+  initReplyToComment({ persons, inputText });
 }

@@ -1,24 +1,21 @@
 import { getComments, postComment } from "./api.js";
+import { initDeleteLastComentListener } from "./initFunctions.js";
 import {
   showListLoaderGet,
   hideListLoaderGet,
   showListLoaderPost,
   hideListLoaderPost,
 } from "./loaders.js";
-import {
-  initReplyToComment,
-  initDeleteLastComentListener,
-} from "./initFunctions.js";
 import { renderComments } from "./renderComments.js";
 
 // Объявляем глобальные константы для всего проекта
 const inputName = document.querySelector(".add-form-name");
-export const inputText = document.querySelector(".add-form-text");
+const inputText = document.querySelector(".add-form-text");
 const addButtonElement = document.querySelector(".add-form-button");
 const addFormElement = document.querySelector(".add-form");
 
 // Храним информацию о пользователях в массиве
-export let persons = [];
+let persons = [];
 
 let isLoading = false;
 
@@ -45,8 +42,8 @@ const getCommentsInfo = () => {
       });
 
       persons = appComments;
-      renderComments({ persons, initReplyToCommentWithoutParams });
-      initDeleteLastComentListener({ persons, renderComments });
+      renderComments({ persons, inputText });
+      initDeleteLastComentListener({ persons, renderComments, inputText });
     })
     .then(() => {
       hideListLoaderGet();
@@ -82,12 +79,6 @@ const postCommentInfo = () => {
       }
     });
 };
-
-export function initReplyToCommentWithoutParams() {
-  initReplyToComment({ persons, inputText });
-}
-
-initReplyToCommentWithoutParams();
 
 // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
 // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
@@ -163,6 +154,6 @@ inputText.addEventListener("keyup", (event) => {
     });
 
     // Вызываем рендер функцию для отрисовки нового коментария
-    renderComments({ persons, initReplyToCommentWithoutParams });
+    renderComments({ persons, inputText });
   }
 });
