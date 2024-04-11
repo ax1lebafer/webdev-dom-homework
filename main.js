@@ -7,6 +7,7 @@ import {
   hideListLoaderPost,
 } from "./loaders.js";
 import { renderComments } from "./renderComments.js";
+import { renderLogin } from "./renderLogin.js";
 
 // Объявляем глобальные константы для всего проекта
 const inputName = document.querySelector(".add-form-name");
@@ -58,7 +59,8 @@ const getCommentsInfo = () => {
     });
 };
 
-getCommentsInfo();
+renderLogin({ getCommentsInfo });
+// getCommentsInfo();
 
 // Функция для добавления данных о пользователе в БД API
 const postCommentInfo = () => {

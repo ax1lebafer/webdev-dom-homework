@@ -1,9 +1,19 @@
-// import * as ddd from "./prototypes.js";
+const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer/comments";
+const loginUrl = "https://wedev-api.sky.pro/api/user/login";
+
+export let token;
+
+export function setToken(newToken) {
+  token = newToken;
+}
 
 // Получение комментариев с API
 export function getComments() {
-  return fetch("https://wedev-api.sky.pro/api/v1/raul-karabalin/comments", {
+  return fetch(commentUrl, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }).then((response) => {
     if (response.status === 500) {
       throw new Error("Сервер сломался, попробуй позже");
@@ -15,13 +25,16 @@ export function getComments() {
 
 // Публикация комментария в API
 export function postComment({ inputText, inputName }) {
-  return fetch("https://wedev-api.sky.pro/api/v1/raul-karabalin/comments", {
+  return fetch(commentUrl, {
     method: "POST",
     body: JSON.stringify({
       text: inputText,
       name: inputName,
       forceError: true,
     }),
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }).then((response) => {
     console.log(`${response.status} ошибка сервера`);
 
@@ -35,4 +48,25 @@ export function postComment({ inputText, inputName }) {
 
     return response.json();
   });
+}
+
+// Авторизация пользователя
+export function loginUser({ login, password }) {
+  return fetch(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      login,
+      password,
+    }),
+  })
+    .then((response) => {
+      if (response.status === 400) {
+        throw new Error("Неверный логин или пароль");
+      }
+
+      return response.json();
+    })
+    .catch((error) => {
+      alert(error);
+    });
 }
