@@ -1,5 +1,5 @@
 // Функция для лайков комментариев
-export function initLikeCommentListeners({ persons, renderComments, inputText }) {
+export function initLikeCommentListeners({ persons, renderComments, postCommentInfo }) {
   const likeCommentButtonsElements = document.querySelectorAll(".like-button");
 
   for (const likeCommentButtonElement of likeCommentButtonsElements) {
@@ -18,7 +18,7 @@ export function initLikeCommentListeners({ persons, renderComments, inputText })
         persons[index].isLiked = false;
       }
 
-      renderComments({ persons, inputText });
+      renderComments({ persons, postCommentInfo });
     });
   }
 }
@@ -34,12 +34,12 @@ export function initReplyToComment({ persons, inputText }) {
 }
 
 // Удаление последнего коментария посредством удаления последнего элемента из массива
-export function initDeleteLastComentListener({ persons, renderComments, inputText }) {
+export function initDeleteLastComentListener({ persons, renderComments, postCommentInfo }) {
   const deleteButtonElement = document.querySelector(".delete-form-button");
 
   deleteButtonElement.addEventListener("click", () => {
     persons.pop();
 
-    renderComments({ persons, inputText });
+    renderComments({ persons, postCommentInfo });
   });
 }

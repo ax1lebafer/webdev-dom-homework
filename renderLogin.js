@@ -3,7 +3,7 @@ import { loginUser, setToken } from "./api.js";
 export function renderLogin({ getCommentsInfo }) {
   const appElement = document.querySelector(".app");
 
-  const loginHtml = `<div class="container">
+  const loginHtml = `
   <div class="login-form">
     <p class="login-heading"><b>Форма входа</b></p>
     <div class="login-wrapper">
@@ -18,8 +18,7 @@ export function renderLogin({ getCommentsInfo }) {
     <div class="register-wrapper">
       <a class="register-link" href="#">Зарегистрироваться</a>
     </div>
-  </div>
-</div>`;
+  </div>`;
 
   appElement.innerHTML = loginHtml;
 

@@ -1,7 +1,9 @@
 // Функция добавляет лоадер загрузки комментариев
 export const showListLoaderGet = () => {
   const listLoader = document.querySelector(".list-loader-get");
-  listLoader.classList.remove("hidden");
+  if(listLoader.classList.contains('hidden')) {
+    listLoader.classList.remove("hidden");
+  }
 };
 
 // Функция удаляет лоадер загрузки комментариев
