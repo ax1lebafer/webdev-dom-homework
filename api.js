@@ -1,4 +1,4 @@
-const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer1/comments";
+const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer/comments";
 const loginUrl = "https://wedev-api.sky.pro/api/user/login";
 
 export let token;
@@ -58,15 +58,11 @@ export function loginUser({ login, password }) {
       login,
       password,
     }),
-  })
-    .then((response) => {
-      if (response.status === 400) {
-        throw new Error("Неверный логин или пароль");
-      }
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Неверный логин или пароль");
+    }
 
-      return response.json();
-    })
-    .catch((error) => {
-      alert(error);
-    });
+    return response.json();
+  });
 }
