@@ -22,7 +22,7 @@ export function setUser(newUser) {
 let isLoading = false;
 
 // Подключаю БД с API
-const getCommentsInfo = () => {
+export const getCommentsInfo = () => {
   if (!isLoading) {
     showListLoaderGet();
   }
@@ -88,4 +88,3 @@ const postCommentInfo = ({ inputText, inputName }) => {
 
 renderApp({ getCommentsInfo, user, setUser });
 renderComments({ persons, postCommentInfo, user });
-// renderLogin({ getCommentsInfo });

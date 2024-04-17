@@ -1,7 +1,7 @@
 import { initAddCommentListeners } from "./initFunctions.js";
 import { renderLogin } from "./renderLogin.js";
 
-export function renderForm({ user, setUser }) {
+export function renderForm({ user, setUser, getCommentsInfo }) {
   const formElement = document.querySelector(".form");
 
   formElement.innerHTML = user
@@ -29,7 +29,7 @@ export function renderForm({ user, setUser }) {
 
   if (buttonElement) {
     buttonElement.addEventListener("click", () => {
-      renderLogin({setUser});
+      renderLogin({ setUser, getCommentsInfo, user });
     });
   }
 

@@ -13,5 +13,5 @@ export function renderApp({ getCommentsInfo, user, setUser }) {
   renderLoaderGet();
   renderLoaderPost();
   getCommentsInfo();
-  renderForm({ user, setUser });
+  renderForm({ user, setUser, getCommentsInfo });
 }

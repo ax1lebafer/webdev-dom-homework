@@ -1,7 +1,7 @@
 import { loginUser, setToken } from "./api.js";
 import { renderApp } from "./renderApp.js";
 
-export function renderLogin({setUser}) {
+export function renderLogin({ setUser, getCommentsInfo, user }) {
   const containerElement = document.querySelector(".container");
 
   containerElement.innerHTML = `
@@ -22,11 +22,10 @@ export function renderLogin({setUser}) {
   </div>`;
 
   const loginButtonElement = document.querySelector(".login-button");
+  const loginInputElement = document.querySelector(".login-input");
+  const passwordInputElement = document.querySelector(".password-input");
 
   loginButtonElement.addEventListener("click", () => {
-    const loginInputElement = document.querySelector(".login-input");
-    const passwordInputElement = document.querySelector(".password-input");
-
     if (loginInputElement.value.trim() === "") {
       alert("Введите логин");
       return;
@@ -44,10 +43,10 @@ export function renderLogin({setUser}) {
       .then((responseData) => {
         setUser(responseData.user);
         setToken(responseData.user.token);
-        renderApp({getCommentsInfo, user, setUser});
+        renderApp({ getCommentsInfo, user, setUser });
       })
       .catch((error) => {
-        if ((error.message = "Нет авторизации")) {
+        if (error.message === "Нет авторизации") {
           alert("Не верный логин или пароль");
         }
         if (error.message === "Сервер сломался") {
@@ -57,6 +56,8 @@ export function renderLogin({setUser}) {
         if (error.message === "Failed to fetch") {
           alert("Кажется что-то пошло не так, попробуйте позже");
         }
+
+        alert(error);
       });
   });
 }
