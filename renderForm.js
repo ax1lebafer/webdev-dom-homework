@@ -1,7 +1,8 @@
 import { initAddCommentListeners } from "./initFunctions.js";
+import { user } from "./main.js";
 import { renderLogin } from "./renderLogin.js";
 
-export function renderForm({ user, setUser, getCommentsInfo }) {
+export function renderForm({ persons }) {
   const formElement = document.querySelector(".form");
 
   formElement.innerHTML = user
@@ -29,17 +30,11 @@ export function renderForm({ user, setUser, getCommentsInfo }) {
 
   if (buttonElement) {
     buttonElement.addEventListener("click", () => {
-      renderLogin({ setUser, getCommentsInfo, user });
+      renderLogin({ persons });
     });
   }
 
   if (user) {
-    initAddCommentListeners({
-      persons,
-      initLikeCommentListeners,
-      initReplyToComment,
-      postCommentInfo,
-      renderComments,
-    });
+    initAddCommentListeners({ persons });
   }
 }

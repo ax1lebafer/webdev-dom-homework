@@ -1,14 +1,9 @@
 import { showListLoaderPost, hideListLoaderPost } from "./loaders.js";
-import { user } from "./main.js";
+import { postCommentInfo, user } from "./main.js";
+import { renderComments } from "./renderComments.js";
 
 // Функция добавления комментрий
-export function initAddCommentListeners({
-  persons,
-  initLikeCommentListeners,
-  initReplyToComment,
-  postCommentInfo,
-  renderComments,
-}) {
+export function initAddCommentListeners({ persons }) {
   const inputName = document.querySelector(".add-form-name");
   const inputText = document.querySelector(".add-form-text");
   const addButtonElement = document.querySelector(".add-form-button");
@@ -99,11 +94,7 @@ export function initAddCommentListeners({
 }
 
 // Функция для лайков комментариев
-export function initLikeCommentListeners({
-  persons,
-  renderComments,
-  postCommentInfo,
-}) {
+export function initLikeCommentListeners({ persons }) {
   const likeCommentButtonsElements = document.querySelectorAll(".like-button");
 
   for (const likeCommentButtonElement of likeCommentButtonsElements) {
@@ -122,13 +113,15 @@ export function initLikeCommentListeners({
         persons[index].isLiked = false;
       }
 
-      renderComments({ persons, postCommentInfo, user });
+      renderComments({ persons });
     });
   }
 }
 
 // Ответ на комментарий
-export function initReplyToComment({ persons, inputText }) {
+export function initReplyToComment({ persons }) {
+  const inputText = document.querySelector(".add-form-text");
+
   const commentsBodyElements = document.querySelectorAll(".comment");
   commentsBodyElements.forEach((comment, index) => {
     comment.addEventListener("click", () => {

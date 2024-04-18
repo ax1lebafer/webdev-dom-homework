@@ -1,7 +1,8 @@
 import { loginUser, setToken } from "./api.js";
+import { setUser } from "./main.js";
 import { renderApp } from "./renderApp.js";
 
-export function renderLogin({ setUser, getCommentsInfo, user }) {
+export function renderLogin({ persons }) {
   const containerElement = document.querySelector(".container");
 
   containerElement.innerHTML = `
@@ -43,7 +44,7 @@ export function renderLogin({ setUser, getCommentsInfo, user }) {
       .then((responseData) => {
         setUser(responseData.user);
         setToken(responseData.user.token);
-        renderApp({ getCommentsInfo, user, setUser });
+        renderApp({ persons });
       })
       .catch((error) => {
         if (error.message === "Нет авторизации") {

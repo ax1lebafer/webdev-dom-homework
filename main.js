@@ -1,14 +1,7 @@
 import { getComments, postComment } from "./api.js";
-import { initDeleteLastComentListener } from "./initFunctions.js";
-import {
-  showListLoaderGet,
-  hideListLoaderGet,
-  showListLoaderPost,
-  hideListLoaderPost,
-} from "./loaders.js";
+import { showListLoaderGet, hideListLoaderGet } from "./loaders.js";
 import { renderApp } from "./renderApp.js";
 import { renderComments } from "./renderComments.js";
-import { renderLogin } from "./renderLogin.js";
 
 // Храним информацию о пользователях в массиве
 let persons = [];
@@ -44,12 +37,7 @@ export const getCommentsInfo = () => {
       });
 
       persons = appComments;
-      renderComments({ persons, postCommentInfo, user });
-      initDeleteLastComentListener({
-        persons,
-        renderComments,
-        postCommentInfo,
-      });
+      renderComments({ persons });
     })
     .then(() => {
       hideListLoaderGet();
@@ -67,7 +55,7 @@ export const getCommentsInfo = () => {
 // getCommentsInfo();
 
 // Функция для добавления данных о пользователе в БД API
-const postCommentInfo = ({ inputText, inputName }) => {
+export const postCommentInfo = ({ inputText, inputName }) => {
   return postComment({
     inputText: inputText.value.vulnerabilityPrevention(),
     inputName: inputName.value.vulnerabilityPrevention(),
@@ -86,5 +74,4 @@ const postCommentInfo = ({ inputText, inputName }) => {
     });
 };
 
-renderApp({ getCommentsInfo, user, setUser });
-renderComments({ persons, postCommentInfo, user });
+renderApp({ persons });

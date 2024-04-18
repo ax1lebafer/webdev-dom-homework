@@ -2,12 +2,11 @@ import * as ddd from "./prototypes.js";
 import {
   initLikeCommentListeners,
   initReplyToComment,
-  initAddCommentListeners,
 } from "./initFunctions.js";
-import { showListLoaderPost, hideListLoaderPost } from "./loaders.js";
+import { user } from "./main.js";
 
 // Рендер комментариев
-export function renderComments({ persons, postCommentInfo, user }) {
+export function renderComments({ persons }) {
   const commentsContainerElement = document.querySelector(".comments");
 
   const commentsHtml = persons
@@ -39,12 +38,7 @@ export function renderComments({ persons, postCommentInfo, user }) {
   commentsContainerElement.innerHTML = commentsHtml;
 
   if (user) {
-    initAddCommentListeners({
-      persons,
-      initLikeCommentListeners,
-      initReplyToComment,
-      postCommentInfo,
-      renderComments,
-    });
+    initLikeCommentListeners({ persons });
+    initReplyToComment({ persons});
   }
 }
