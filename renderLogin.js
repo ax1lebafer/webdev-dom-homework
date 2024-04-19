@@ -1,6 +1,7 @@
 import { loginUser, setToken } from "./api.js";
 import { setUser } from "./main.js";
 import { renderApp } from "./renderApp.js";
+import * as ddd from "./prototypes.js";
 
 export function renderLogin({ persons }) {
   const containerElement = document.querySelector(".container");
@@ -38,8 +39,8 @@ export function renderLogin({ persons }) {
     }
 
     loginUser({
-      login: loginInputElement.value,
-      password: passwordInputElement.value,
+      login: loginInputElement.value.vulnerabilityPrevention(),
+      password: passwordInputElement.value.vulnerabilityPrevention(),
     })
       .then((responseData) => {
         setUser(responseData.user);

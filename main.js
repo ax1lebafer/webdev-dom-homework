@@ -2,7 +2,6 @@ import { getComments, postComment } from "./api.js";
 import {
   showListLoaderGet,
   hideListLoaderGet,
-  hideListLoaderPost,
 } from "./loaders.js";
 import { renderApp } from "./renderApp.js";
 import { renderComments } from "./renderComments.js";

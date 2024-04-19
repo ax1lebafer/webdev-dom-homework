@@ -71,9 +71,6 @@ export function initAddCommentListeners({ persons }) {
         addFormElement.style.display = "flex";
         hideListLoaderPost();
       });
-
-      // Вызываем рендер функцию для отрисовки нового коментария
-      renderComments({ persons });
     }
   });
 }
