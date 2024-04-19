@@ -2,6 +2,7 @@ import { loginUser, setToken } from "./api.js";
 import { setUser } from "./main.js";
 import { renderApp } from "./renderApp.js";
 import * as ddd from "./prototypes.js";
+import { renderRegister } from "./renderRegister.js";
 
 export function renderLogin({ persons }) {
   const containerElement = document.querySelector(".container");
@@ -26,6 +27,7 @@ export function renderLogin({ persons }) {
   const loginButtonElement = document.querySelector(".login-button");
   const loginInputElement = document.querySelector(".login-input");
   const passwordInputElement = document.querySelector(".password-input");
+  const registerLinkElement = document.querySelector(".register-link");
 
   loginButtonElement.addEventListener("click", () => {
     if (loginInputElement.value.trim() === "") {
@@ -61,5 +63,9 @@ export function renderLogin({ persons }) {
 
         alert(error);
       });
+  });
+
+  registerLinkElement.addEventListener("click", () => {
+    renderRegister({ persons });
   });
 }

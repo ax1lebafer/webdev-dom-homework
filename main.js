@@ -2,6 +2,7 @@ import { getComments, postComment } from "./api.js";
 import {
   showListLoaderGet,
   hideListLoaderGet,
+  hideListLoaderPost,
 } from "./loaders.js";
 import { renderApp } from "./renderApp.js";
 import { renderComments } from "./renderComments.js";
@@ -54,8 +55,6 @@ export const getCommentsInfo = () => {
       }
     });
 };
-
-// getCommentsInfo();
 
 // Функция для добавления данных о пользователе в БД API
 export const postCommentInfo = ({ inputText, inputName }) => {

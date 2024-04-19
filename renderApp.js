@@ -8,8 +8,8 @@ export function renderApp({ persons }) {
   containerElement.innerHTML = `
     <div class="list-loader-get"></div>
     <ul class="comments" id="comments"></ul>
-    <div class="form"></div>
-    <div class="list-loader-post hidden"></div>`;
+    <div class="list-loader-post hidden"></div>
+    <div class="form"></div>`
 
   renderLoaderGet();
   renderLoaderPost();

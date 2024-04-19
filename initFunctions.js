@@ -123,6 +123,6 @@ export function initDeleteLastComentListener({
   deleteButtonElement.addEventListener("click", () => {
     persons.pop();
 
-    renderComments({ persons, postCommentInfo, user });
+    renderComments({ persons });
   });
 }
