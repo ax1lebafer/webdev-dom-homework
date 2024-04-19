@@ -39,6 +39,6 @@ export function renderComments({ persons }) {
 
   if (user) {
     initLikeCommentListeners({ persons });
-    initReplyToComment({ persons});
+    initReplyToComment({ persons });
   }
 }

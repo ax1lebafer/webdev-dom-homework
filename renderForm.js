@@ -11,6 +11,9 @@ export function renderForm({ persons }) {
       type="text"
       class="add-form-name"
       placeholder="Введите ваше имя"
+      value="${user.name}"
+      readonly
+      disabled
     />
     <textarea
       type="textarea"
@@ -24,12 +27,14 @@ export function renderForm({ persons }) {
         Удалить последний комментарий
       </button>
     </div>`
-    : `<div>Чтобы оставить комментарий, <button id="authButton" type="button">авторизуйтесь.</button></div>`;
+    : `<div class="auth-form">Чтобы оставить комментарий, <button id="auth-button" type="button">авторизуйтесь.</button>
+    </div>`;
 
-  const buttonElement = document.querySelector("#authButton");
+  const buttonElement = document.querySelector("#auth-button");
 
   if (buttonElement) {
     buttonElement.addEventListener("click", () => {
+      window.scrollTo(0, 0);
       renderLogin({ persons });
     });
   }

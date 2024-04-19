@@ -9,9 +9,6 @@ export function initAddCommentListeners({ persons }) {
   const addButtonElement = document.querySelector(".add-form-button");
   const addFormElement = document.querySelector(".add-form");
 
-  // initLikeCommentListeners({ persons, renderComments, postCommentInfo });
-  // initReplyToComment({ persons, inputText });
-
   // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
   // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
   if (addButtonElement) {
@@ -19,14 +16,6 @@ export function initAddCommentListeners({ persons }) {
   }
 
   // Тут кнопка разблокируется, если в какой либо форме будет текст
-  inputName.addEventListener("input", () => {
-    if (inputName.value.length > 0) {
-      return (addButtonElement.disabled = false);
-    } else {
-      return (addButtonElement.disabled = true);
-    }
-  });
-
   inputText.addEventListener("input", () => {
     if (inputText.value.length > 0) {
       return (addButtonElement.disabled = false);
@@ -44,8 +33,6 @@ export function initAddCommentListeners({ persons }) {
 
     if (inputName.value.isEmpty() || inputText.value.isEmpty()) {
       inputText.value = "";
-      inputName.value = "";
-      inputName.classList.add("error");
       inputText.classList.add("error");
       return;
     }
@@ -73,8 +60,6 @@ export function initAddCommentListeners({ persons }) {
         inputText.value === "\n"
       ) {
         inputText.value = "";
-        inputName.value = "";
-        inputName.classList.add("error");
         inputText.classList.add("error");
         return;
       }
@@ -88,7 +73,7 @@ export function initAddCommentListeners({ persons }) {
       });
 
       // Вызываем рендер функцию для отрисовки нового коментария
-      renderComments({ persons, postCommentInfo, user });
+      renderComments({ persons });
     }
   });
 }

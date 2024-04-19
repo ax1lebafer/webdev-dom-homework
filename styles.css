@@ -554,6 +554,19 @@ body {
   opacity: 0.9;
 }
 
+.auth-form {
+  margin-top: 20px;
+}
+
+#auth-button {
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+}
+
 .list-loader-post {
   margin-top: 50px;
 }
