@@ -24,6 +24,8 @@ export const getCommentsInfo = () => {
     showListLoaderGet();
   }
 
+  const addFormElement = document.querySelector(".add-form");
+
   getComments()
     .then((responseData) => {
       // Преобразую в нужный мне формат данные с API
@@ -53,6 +55,12 @@ export const getCommentsInfo = () => {
       } else {
         alert(error);
       }
+    })
+    .finally(() => {
+      if (addFormElement) {
+        addFormElement.style.display = "flex";
+      }
+      hideListLoaderPost();
     });
 };
 

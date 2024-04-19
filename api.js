@@ -1,4 +1,4 @@
-const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer3/comments";
+const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer4/comments";
 const loginUrl = "https://wedev-api.sky.pro/api/user/login";
 const registerUrl = "https://wedev-api.sky.pro/api/user";
 

@@ -1,5 +1,5 @@
-import { showListLoaderPost, hideListLoaderPost } from "./loaders.js";
-import { postCommentInfo, user } from "./main.js";
+import { showListLoaderPost } from "./loaders.js";
+import { postCommentInfo } from "./main.js";
 import { renderComments } from "./renderComments.js";
 
 // Функция добавления комментрий
@@ -40,10 +40,7 @@ export function initAddCommentListeners({ persons }) {
     addFormElement.style.display = "none";
     showListLoaderPost();
 
-    postCommentInfo({ inputText, inputName }).then(() => {
-      addFormElement.style.display = "flex";
-      hideListLoaderPost();
-    });
+    postCommentInfo({ inputText, inputName });
   });
 
   // То же самое, что и выше, только для добавления коментария по нажатию "Enter"
@@ -67,10 +64,7 @@ export function initAddCommentListeners({ persons }) {
       addFormElement.style.display = "none";
       showListLoaderPost();
 
-      postCommentInfo({ inputText, inputName }).then(() => {
-        addFormElement.style.display = "flex";
-        hideListLoaderPost();
-      });
+      postCommentInfo({ inputText, inputName });
     }
   });
 }
