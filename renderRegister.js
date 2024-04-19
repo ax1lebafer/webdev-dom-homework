@@ -12,23 +12,38 @@ export function renderRegister({ persons }) {
   <div class="login-wrapper">
     <input class="name-input" type="text" placeholder="Введите имя" />
     <input class="login-input" type="text" placeholder="Введите логин" />
-    <input
-      class="password-input"
-      type="text"
-      placeholder="Введите пароль"
-    />
+    <div class="password-wrapper">
+      <input
+        class="password-input"
+        type="password"
+        placeholder="Введите пароль"
+      />
+      <span class="show-password-btn" id="showPasswordBtn"
+        >&#128065;</span
+      >
+    </div>
   </div>
   <button class="register-button">Зарегистрироваться</button>
   <div class="register-wrapper">
     <a class="login-link" href="#">Войти</a>
-  </div>
-</div>`;
+  </div>`;
 
   const nameInputElement = document.querySelector(".name-input");
   const loginInputElement = document.querySelector(".login-input");
   const passwordInputElement = document.querySelector(".password-input");
   const registerButtonElement = document.querySelector(".register-button");
   const loginLinkElement = document.querySelector(".login-link");
+  const showPasswordBtn = document.getElementById("showPasswordBtn");
+
+  showPasswordBtn.addEventListener("click", function () {
+    if (passwordInputElement.type === "password") {
+      passwordInputElement.type = "text";
+      showPasswordBtn.textContent = "🙈";
+    } else {
+      passwordInputElement.type = "password";
+      showPasswordBtn.textContent = "👁️";
+    }
+  });
 
   registerButtonElement.addEventListener("click", () => {
     if (nameInputElement.value.trim() === "") {

@@ -45,6 +45,20 @@ body {
   border-radius: 8px;
   border: none;
   outline: none;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.show-password-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .login-button,

@@ -9,25 +9,35 @@ export function renderLogin({ persons }) {
 
   containerElement.innerHTML = `
   <div class="login-form">
-  <p class="login-heading"><b>Форма входа</b></p>
-  <div class="login-wrapper">
-    <input class="login-input" type="text" placeholder="Введите логин" />
-    <input
-      class="password-input"
-      type="text"
-      placeholder="Введите пароль"
-    />
-  </div>
-  <button class="login-button">Войти</button>
-  <div class="register-wrapper">
-    <a class="register-link" href="#">Зарегистрироваться</a>
-  </div>
+    <p class="login-heading"><b>Форма входа</b></p>
+    <div class="login-wrapper">
+      <input class="login-input" type="text" placeholder="Введите логин" />
+      <div class="password-wrapper">
+        <input class="password-input" type="password" placeholder="Введите пароль" />
+        <span class="show-password-btn" id="showPasswordBtn">&#128065;</span>
+      </div>
+    </div>
+    <button class="login-button">Войти</button>
+    <div class="register-wrapper">
+      <a class="register-link" href="#">Зарегистрироваться</a>
+    </div>
   </div>`;
 
   const loginButtonElement = document.querySelector(".login-button");
   const loginInputElement = document.querySelector(".login-input");
   const passwordInputElement = document.querySelector(".password-input");
   const registerLinkElement = document.querySelector(".register-link");
+  const showPasswordBtn = document.getElementById("showPasswordBtn");
+
+  showPasswordBtn.addEventListener("click", function () {
+    if (passwordInputElement.type === "password") {
+      passwordInputElement.type = "text";
+      showPasswordBtn.textContent = "🙈";
+    } else {
+      passwordInputElement.type = "password";
+      showPasswordBtn.textContent = "👁️";
+    }
+  });
 
   loginButtonElement.addEventListener("click", () => {
     if (loginInputElement.value.trim() === "") {
