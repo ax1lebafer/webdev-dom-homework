@@ -1,11 +1,11 @@
-import { registerUser, setToken } from "./api.js";
-import { setUser } from "./main.js";
-import * as ddd from "./prototypes.js";
-import { renderApp } from "./renderApp.js";
-import { renderLogin } from "./renderLogin.js";
+import { registerUser, setToken } from './api.js';
+import { setUser } from './main.js';
+import * as ddd from './prototypes.js';
+import { renderApp } from './renderApp.js';
+import { renderLogin } from './renderLogin.js';
 
 export function renderRegister({ persons }) {
-  const containerElement = document.querySelector(".container");
+  const containerElement = document.querySelector('.container');
 
   containerElement.innerHTML = `<div class="login-form">
   <p class="login-heading"><b>Форма регистрации</b></p>
@@ -28,36 +28,36 @@ export function renderRegister({ persons }) {
     <a class="login-link" href="#">Войти</a>
   </div>`;
 
-  const nameInputElement = document.querySelector(".name-input");
-  const loginInputElement = document.querySelector(".login-input");
-  const passwordInputElement = document.querySelector(".password-input");
-  const registerButtonElement = document.querySelector(".register-button");
-  const loginLinkElement = document.querySelector(".login-link");
-  const showPasswordBtn = document.getElementById("showPasswordBtn");
+  const nameInputElement = document.querySelector('.name-input');
+  const loginInputElement = document.querySelector('.login-input');
+  const passwordInputElement = document.querySelector('.password-input');
+  const registerButtonElement = document.querySelector('.register-button');
+  const loginLinkElement = document.querySelector('.login-link');
+  const showPasswordBtn = document.getElementById('showPasswordBtn');
 
-  showPasswordBtn.addEventListener("click", function () {
-    if (passwordInputElement.type === "password") {
-      passwordInputElement.type = "text";
-      showPasswordBtn.textContent = "🙈";
+  showPasswordBtn.addEventListener('click', function () {
+    if (passwordInputElement.type === 'password') {
+      passwordInputElement.type = 'text';
+      showPasswordBtn.textContent = '🙈';
     } else {
-      passwordInputElement.type = "password";
-      showPasswordBtn.textContent = "👁️";
+      passwordInputElement.type = 'password';
+      showPasswordBtn.textContent = '👁️';
     }
   });
 
-  registerButtonElement.addEventListener("click", () => {
-    if (nameInputElement.value.trim() === "") {
-      alert("Введите имя");
+  registerButtonElement.addEventListener('click', () => {
+    if (nameInputElement.value.trim() === '') {
+      alert('Введите имя');
       return;
     }
 
-    if (loginInputElement.value.trim() === "") {
-      alert("Введите логин");
+    if (loginInputElement.value.trim() === '') {
+      alert('Введите логин');
       return;
     }
 
-    if (passwordInputElement.value.trim() === "") {
-      alert("Введите пароль");
+    if (passwordInputElement.value.trim() === '') {
+      alert('Введите пароль');
       return;
     }
 
@@ -73,13 +73,13 @@ export function renderRegister({ persons }) {
         renderApp({ persons });
       })
       .catch((error) => {
-        if (error.message === "Такой пользователь уже существует") {
-          alert("Такой пользователь уже существует");
+        if (error.message === 'Такой пользователь уже существует') {
+          alert('Такой пользователь уже существует');
         }
       });
   });
 
-  loginLinkElement.addEventListener("click", () => {
+  loginLinkElement.addEventListener('click', () => {
     renderLogin({ persons });
   });
 }

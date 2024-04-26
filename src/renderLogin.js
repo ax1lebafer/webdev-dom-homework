@@ -1,11 +1,11 @@
-import { loginUser, setToken } from "./api.js";
-import { setUser } from "./main.js";
-import { renderApp } from "./renderApp.js";
-import * as ddd from "./prototypes.js";
-import { renderRegister } from "./renderRegister.js";
+import { loginUser, setToken } from './api.js';
+import { setUser } from './main.js';
+import { renderApp } from './renderApp.js';
+import * as ddd from './prototypes.js';
+import { renderRegister } from './renderRegister.js';
 
 export function renderLogin({ persons }) {
-  const containerElement = document.querySelector(".container");
+  const containerElement = document.querySelector('.container');
 
   containerElement.innerHTML = `
   <div class="login-form">
@@ -23,30 +23,30 @@ export function renderLogin({ persons }) {
     </div>
   </div>`;
 
-  const loginButtonElement = document.querySelector(".login-button");
-  const loginInputElement = document.querySelector(".login-input");
-  const passwordInputElement = document.querySelector(".password-input");
-  const registerLinkElement = document.querySelector(".register-link");
-  const showPasswordBtn = document.getElementById("showPasswordBtn");
+  const loginButtonElement = document.querySelector('.login-button');
+  const loginInputElement = document.querySelector('.login-input');
+  const passwordInputElement = document.querySelector('.password-input');
+  const registerLinkElement = document.querySelector('.register-link');
+  const showPasswordBtn = document.getElementById('showPasswordBtn');
 
-  showPasswordBtn.addEventListener("click", function () {
-    if (passwordInputElement.type === "password") {
-      passwordInputElement.type = "text";
-      showPasswordBtn.textContent = "🙈";
+  showPasswordBtn.addEventListener('click', function () {
+    if (passwordInputElement.type === 'password') {
+      passwordInputElement.type = 'text';
+      showPasswordBtn.textContent = '🙈';
     } else {
-      passwordInputElement.type = "password";
-      showPasswordBtn.textContent = "👁️";
+      passwordInputElement.type = 'password';
+      showPasswordBtn.textContent = '👁️';
     }
   });
 
-  loginButtonElement.addEventListener("click", () => {
-    if (loginInputElement.value.trim() === "") {
-      alert("Введите логин");
+  loginButtonElement.addEventListener('click', () => {
+    if (loginInputElement.value.trim() === '') {
+      alert('Введите логин');
       return;
     }
 
-    if (passwordInputElement.value.trim() === "") {
-      alert("Введите пароль");
+    if (passwordInputElement.value.trim() === '') {
+      alert('Введите пароль');
       return;
     }
 
@@ -60,22 +60,22 @@ export function renderLogin({ persons }) {
         renderApp({ persons });
       })
       .catch((error) => {
-        if (error.message === "Нет авторизации") {
-          alert("Не верный логин или пароль");
+        if (error.message === 'Нет авторизации') {
+          alert('Не верный логин или пароль');
         }
-        if (error.message === "Сервер сломался") {
-          alert("Сервер сломался, попробуй позже");
+        if (error.message === 'Сервер сломался') {
+          alert('Сервер сломался, попробуй позже');
           return;
         }
-        if (error.message === "Failed to fetch") {
-          alert("Кажется что-то пошло не так, попробуйте позже");
+        if (error.message === 'Failed to fetch') {
+          alert('Кажется что-то пошло не так, попробуйте позже');
         }
 
         alert(error);
       });
   });
 
-  registerLinkElement.addEventListener("click", () => {
+  registerLinkElement.addEventListener('click', () => {
     renderRegister({ persons });
   });
 }

@@ -1,13 +1,13 @@
-import * as ddd from "./prototypes.js";
+import * as ddd from './prototypes.js';
 import {
   initLikeCommentListeners,
   initReplyToComment,
-} from "./initFunctions.js";
-import { user } from "./main.js";
+} from './initFunctions.js';
+import { user } from './main.js';
 
 // Рендер комментариев
 export function renderComments({ persons }) {
-  const commentsContainerElement = document.querySelector(".comments");
+  const commentsContainerElement = document.querySelector('.comments');
 
   const commentsHtml = persons
     .map((person, index) => {
@@ -25,15 +25,15 @@ export function renderComments({ persons }) {
             <div class="likes">
               <span class="likes-counter">${person.likes}</span>
               <button data-index="${index}" data-like-counts="${
-        person.likes
-      }" class="like-button ${
-        persons[index].isLiked ? "-active-like" : ""
-      }"></button>
+                person.likes
+              }" class="like-button ${
+                persons[index].isLiked ? '-active-like' : ''
+              }"></button>
             </div>
           </div>
         </li>`;
     })
-    .join("");
+    .join('');
 
   commentsContainerElement.innerHTML = commentsHtml;
 

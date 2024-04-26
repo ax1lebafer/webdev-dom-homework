@@ -1,9 +1,9 @@
-import { hideListLoaderPost } from "./loaders.js";
-import { renderForm } from "./renderForm.js";
+import { hideListLoaderPost } from './loaders.js';
+import { renderForm } from './renderForm.js';
 
-const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer4/comments";
-const loginUrl = "https://wedev-api.sky.pro/api/user/login";
-const registerUrl = "https://wedev-api.sky.pro/api/user";
+const commentUrl = 'https://wedev-api.sky.pro/api/v2/ax1lebafer4/comments';
+const loginUrl = 'https://wedev-api.sky.pro/api/user/login';
+const registerUrl = 'https://wedev-api.sky.pro/api/user';
 
 export let token;
 
@@ -14,13 +14,13 @@ export function setToken(newToken) {
 // Получение комментариев с API
 export function getComments() {
   return fetch(commentUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }).then((response) => {
     if (response.status === 500) {
-      throw new Error("Сервер сломался, попробуй позже");
+      throw new Error('Сервер сломался, попробуй позже');
     }
 
     return response.json();
@@ -30,7 +30,7 @@ export function getComments() {
 // Публикация комментария в API
 export function postComment({ inputText, inputName, persons }) {
   return fetch(commentUrl, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       text: inputText,
       name: inputName,
@@ -45,11 +45,11 @@ export function postComment({ inputText, inputName, persons }) {
     if (response.status === 400) {
       hideListLoaderPost();
       renderForm({ persons });
-      throw new Error("Имя и комментарий должны быть не короче 3 символов");
+      throw new Error('Имя и комментарий должны быть не короче 3 символов');
     }
 
     if (response.status === 500) {
-      throw new Error("Сервер сломался, попробуй позже");
+      throw new Error('Сервер сломался, попробуй позже');
     }
 
     return response.json();
@@ -59,14 +59,14 @@ export function postComment({ inputText, inputName, persons }) {
 // Авторизация пользователя
 export function loginUser({ login, password }) {
   return fetch(loginUrl, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       login,
       password,
     }),
   }).then((response) => {
     if (response.status === 400) {
-      throw new Error("Неверный логин или пароль");
+      throw new Error('Неверный логин или пароль');
     }
 
     return response.json();
@@ -76,7 +76,7 @@ export function loginUser({ login, password }) {
 // Регистрация пользователя
 export function registerUser({ login, password, name }) {
   return fetch(registerUrl, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       login,
       password,
@@ -84,11 +84,11 @@ export function registerUser({ login, password, name }) {
     }),
   }).then((response) => {
     if (response.status === 500) {
-      throw new Error("Сервер недоступен");
+      throw new Error('Сервер недоступен');
     }
 
     if (response.status === 400) {
-      throw new Error("Такой пользователь уже существует");
+      throw new Error('Такой пользователь уже существует');
     }
 
     return response.json();
