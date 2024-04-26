@@ -1,3 +1,6 @@
+import { hideListLoaderPost } from "./loaders.js";
+import { renderForm } from "./renderForm.js";
+
 const commentUrl = "https://wedev-api.sky.pro/api/v2/ax1lebafer4/comments";
 const loginUrl = "https://wedev-api.sky.pro/api/user/login";
 const registerUrl = "https://wedev-api.sky.pro/api/user";
@@ -25,7 +28,7 @@ export function getComments() {
 }
 
 // Публикация комментария в API
-export function postComment({ inputText, inputName }) {
+export function postComment({ inputText, inputName, persons }) {
   return fetch(commentUrl, {
     method: "POST",
     body: JSON.stringify({
@@ -40,6 +43,8 @@ export function postComment({ inputText, inputName }) {
     console.log(`${response.status} ошибка сервера`);
 
     if (response.status === 400) {
+      hideListLoaderPost();
+      renderForm({ persons });
       throw new Error("Имя и комментарий должны быть не короче 3 символов");
     }
 

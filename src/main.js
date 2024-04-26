@@ -33,7 +33,7 @@ export const getCommentsInfo = () => {
       const appComments = responseData.comments.map((comment) => {
         const apiDate = comment.date;
         // const formattedDate = new Date(apiDate).format();
-        const formattedDate = format(new Date(apiDate), 'yyyy-MM-dd hh.mm.ss');
+        const formattedDate = format(new Date(apiDate), "yyyy-MM-dd hh.mm.ss");
 
         return {
           name: comment.author.name,
@@ -71,6 +71,7 @@ export const postCommentInfo = ({ inputText, inputName }) => {
   return postComment({
     inputText: inputText.value.vulnerabilityPrevention(),
     inputName: inputName.value.vulnerabilityPrevention(),
+    persons,
   })
     .then(() => {
       inputText.value = "";
