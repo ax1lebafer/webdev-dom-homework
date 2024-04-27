@@ -43,8 +43,6 @@ export function postComment({ inputText, inputName, persons }) {
     console.log(`${response.status} ошибка сервера`);
 
     if (response.status === 400) {
-      hideListLoaderPost();
-      renderForm({ persons });
       throw new Error('Имя и комментарий должны быть не короче 3 символов');
     }
 

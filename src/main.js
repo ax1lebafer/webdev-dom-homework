@@ -68,6 +68,8 @@ export const getCommentsInfo = () => {
 
 // Функция для добавления данных о пользователе в БД API
 export const postCommentInfo = ({ inputText, inputName }) => {
+  const addFormElement = document.querySelector('.add-form');
+
   return postComment({
     inputText: inputText.value.vulnerabilityPrevention(),
     inputName: inputName.value.vulnerabilityPrevention(),
@@ -83,6 +85,12 @@ export const postCommentInfo = ({ inputText, inputName }) => {
       } else {
         alert(error);
       }
+    })
+    .finally(() => {
+      if (addFormElement) {
+        addFormElement.style.display = 'flex';
+      }
+      hideListLoaderPost();
     });
 };
 
