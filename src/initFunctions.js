@@ -3,7 +3,7 @@ import { postCommentInfo } from './main.js';
 import { renderComments } from './renderComments.js';
 
 // Функция добавления комментрий
-export function initAddCommentListeners({ persons }) {
+export function initAddCommentListeners() {
   const inputName = document.querySelector('.add-form-name');
   const inputText = document.querySelector('.add-form-text');
   const addButtonElement = document.querySelector('.add-form-button');
@@ -110,7 +110,6 @@ export function initReplyToComment({ persons }) {
 export function initDeleteLastComentListener({
   persons,
   renderComments,
-  postCommentInfo,
 }) {
   const deleteButtonElement = document.querySelector('.delete-form-button');
 

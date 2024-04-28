@@ -1,6 +1,3 @@
-import { hideListLoaderPost } from './loaders.js';
-import { renderForm } from './renderForm.js';
-
 const commentUrl = 'https://wedev-api.sky.pro/api/v2/ax1lebafer4/comments';
 const loginUrl = 'https://wedev-api.sky.pro/api/user/login';
 const registerUrl = 'https://wedev-api.sky.pro/api/user';
@@ -28,7 +25,7 @@ export function getComments() {
 }
 
 // Публикация комментария в API
-export function postComment({ inputText, inputName, persons }) {
+export function postComment({ inputText, inputName }) {
   return fetch(commentUrl, {
     method: 'POST',
     body: JSON.stringify({

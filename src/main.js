@@ -6,6 +6,7 @@ import {
 } from './loaders.js';
 import { renderApp } from './renderApp.js';
 import { renderComments } from './renderComments.js';
+import { vulnerabilityPrevention } from './prototypes.js';
 import { format } from 'date-fns';
 
 // Храним информацию о пользователях в массиве
@@ -32,7 +33,6 @@ export const getCommentsInfo = () => {
       // Преобразую в нужный мне формат данные с API
       const appComments = responseData.comments.map((comment) => {
         const apiDate = comment.date;
-        // const formattedDate = new Date(apiDate).format();
         const formattedDate = format(new Date(apiDate), 'yyyy-MM-dd hh.mm.ss');
 
         return {
@@ -71,8 +71,8 @@ export const postCommentInfo = ({ inputText, inputName }) => {
   const addFormElement = document.querySelector('.add-form');
 
   return postComment({
-    inputText: inputText.value.vulnerabilityPrevention(),
-    inputName: inputName.value.vulnerabilityPrevention(),
+    inputText: vulnerabilityPrevention(inputText.value),
+    inputName: vulnerabilityPrevention(inputName.value),
     persons,
   })
     .then(() => {

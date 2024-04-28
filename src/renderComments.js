@@ -1,4 +1,3 @@
-import * as ddd from './prototypes.js';
 import {
   initLikeCommentListeners,
   initReplyToComment,

@@ -1,6 +1,7 @@
 import { registerUser, setToken } from './api.js';
 import { setUser } from './main.js';
-import * as ddd from './prototypes.js';
+// import * as ddd from './prototypes.js';
+import { vulnerabilityPrevention } from './prototypes.js';
 import { renderApp } from './renderApp.js';
 import { renderLogin } from './renderLogin.js';
 
@@ -62,12 +63,11 @@ export function renderRegister({ persons }) {
     }
 
     registerUser({
-      login: loginInputElement.value.vulnerabilityPrevention(),
-      password: passwordInputElement.value.vulnerabilityPrevention(),
-      name: nameInputElement.value.vulnerabilityPrevention(),
+      login: vulnerabilityPrevention(loginInputElement.value),
+      password: vulnerabilityPrevention(passwordInputElement.value),
+      name: vulnerabilityPrevention(nameInputElement.value),
     })
       .then((responseData) => {
-        console.log(responseData.user.name);
         setToken(responseData.user.token);
         setUser(responseData.user);
         renderApp({ persons });
