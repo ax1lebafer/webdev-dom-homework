@@ -1,11 +1,13 @@
-import { getComments, postComment } from "./api.js";
+import { getComments, postComment } from './api.js';
 import {
   showListLoaderGet,
   hideListLoaderGet,
   hideListLoaderPost,
-} from "./loaders.js";
-import { renderApp } from "./renderApp.js";
-import { renderComments } from "./renderComments.js";
+} from './loaders.js';
+import { renderApp } from './renderApp.js';
+import { renderComments } from './renderComments.js';
+import { vulnerabilityPrevention } from './prototypes.js';
+import { format } from 'date-fns';
 
 // Храним информацию о пользователях в массиве
 let persons = [];
@@ -24,14 +26,14 @@ export const getCommentsInfo = () => {
     showListLoaderGet();
   }
 
-  const addFormElement = document.querySelector(".add-form");
+  const addFormElement = document.querySelector('.add-form');
 
   getComments()
     .then((responseData) => {
       // Преобразую в нужный мне формат данные с API
       const appComments = responseData.comments.map((comment) => {
         const apiDate = comment.date;
-        const formattedDate = new Date(apiDate).format();
+        const formattedDate = format(new Date(apiDate), 'yyyy-MM-dd hh.mm.ss');
 
         return {
           name: comment.author.name,
@@ -50,15 +52,15 @@ export const getCommentsInfo = () => {
       isLoading = true;
     })
     .catch((error) => {
-      if (error.message === "Failed to fetch") {
-        alert("Кажется, у вас сломался интернет, попробуйте позже");
+      if (error.message === 'Failed to fetch') {
+        alert('Кажется, у вас сломался интернет, попробуйте позже');
       } else {
         alert(error);
       }
     })
     .finally(() => {
       if (addFormElement) {
-        addFormElement.style.display = "flex";
+        addFormElement.style.display = 'flex';
       }
       hideListLoaderPost();
     });
@@ -66,20 +68,29 @@ export const getCommentsInfo = () => {
 
 // Функция для добавления данных о пользователе в БД API
 export const postCommentInfo = ({ inputText, inputName }) => {
+  const addFormElement = document.querySelector('.add-form');
+
   return postComment({
-    inputText: inputText.value.vulnerabilityPrevention(),
-    inputName: inputName.value.vulnerabilityPrevention(),
+    inputText: vulnerabilityPrevention(inputText.value),
+    inputName: vulnerabilityPrevention(inputName.value),
+    persons,
   })
     .then(() => {
-      inputText.value = "";
+      inputText.value = '';
       return getCommentsInfo();
     })
     .catch((error) => {
-      if (error.message === "Failed to fetch") {
-        alert("Кажется, у вас сломался интернет, попробуйте позже");
+      if (error.message === 'Failed to fetch') {
+        alert('Кажется, у вас сломался интернет, попробуйте позже');
       } else {
         alert(error);
       }
+    })
+    .finally(() => {
+      if (addFormElement) {
+        addFormElement.style.display = 'flex';
+      }
+      hideListLoaderPost();
     });
 };
 

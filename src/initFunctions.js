@@ -1,13 +1,13 @@
-import { showListLoaderPost } from "./loaders.js";
-import { postCommentInfo } from "./main.js";
-import { renderComments } from "./renderComments.js";
+import { showListLoaderPost } from './loaders.js';
+import { postCommentInfo } from './main.js';
+import { renderComments } from './renderComments.js';
 
 // Функция добавления комментрий
-export function initAddCommentListeners({ persons }) {
-  const inputName = document.querySelector(".add-form-name");
-  const inputText = document.querySelector(".add-form-text");
-  const addButtonElement = document.querySelector(".add-form-button");
-  const addFormElement = document.querySelector(".add-form");
+export function initAddCommentListeners() {
+  const inputName = document.querySelector('.add-form-name');
+  const inputText = document.querySelector('.add-form-text');
+  const addButtonElement = document.querySelector('.add-form-button');
+  const addFormElement = document.querySelector('.add-form');
 
   // Кнопка "Написать" будет недоступна прям в момент посещения сайта, так как поля пустые
   // в дальнейшем кнопка разблокируется, если заполнить поля каким-либо текстом
@@ -16,7 +16,7 @@ export function initAddCommentListeners({ persons }) {
   }
 
   // Тут кнопка разблокируется, если в какой либо форме будет текст
-  inputText.addEventListener("input", () => {
+  inputText.addEventListener('input', () => {
     if (inputText.value.length > 0) {
       return (addButtonElement.disabled = false);
     } else {
@@ -27,41 +27,41 @@ export function initAddCommentListeners({ persons }) {
   // Валидация форм. Если какое либо поле будет пустым, placeholder окраситься в красный
   // Если валидация пройдена, коментарий добавиться в ленту по нажатию мышкой на кнопку
   // После того, как коментарий опубликуется, произойдет очистка полей
-  addButtonElement.addEventListener("click", () => {
-    inputName.classList.remove("error");
-    inputText.classList.remove("error");
+  addButtonElement.addEventListener('click', () => {
+    inputName.classList.remove('error');
+    inputText.classList.remove('error');
 
     if (inputName.value.isEmpty() || inputText.value.isEmpty()) {
-      inputText.value = "";
-      inputText.classList.add("error");
+      inputText.value = '';
+      inputText.classList.add('error');
       return;
     }
 
-    addFormElement.style.display = "none";
+    addFormElement.style.display = 'none';
     showListLoaderPost();
 
     postCommentInfo({ inputText, inputName });
   });
 
   // То же самое, что и выше, только для добавления коментария по нажатию "Enter"
-  inputText.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
+  inputText.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
       // Проверяем, была ли нажата клавиша Enter
 
-      inputName.classList.remove("error");
-      inputText.classList.remove("error");
+      inputName.classList.remove('error');
+      inputText.classList.remove('error');
 
       if (
         inputName.value.isEmpty() ||
         inputText.value.isEmpty() ||
-        inputText.value === "\n"
+        inputText.value === '\n'
       ) {
-        inputText.value = "";
-        inputText.classList.add("error");
+        inputText.value = '';
+        inputText.classList.add('error');
         return;
       }
 
-      addFormElement.style.display = "none";
+      addFormElement.style.display = 'none';
       showListLoaderPost();
 
       postCommentInfo({ inputText, inputName });
@@ -71,13 +71,13 @@ export function initAddCommentListeners({ persons }) {
 
 // Функция для лайков комментариев
 export function initLikeCommentListeners({ persons }) {
-  const likeCommentButtonsElements = document.querySelectorAll(".like-button");
+  const likeCommentButtonsElements = document.querySelectorAll('.like-button');
 
   for (const likeCommentButtonElement of likeCommentButtonsElements) {
     const index = likeCommentButtonElement.dataset.index;
     let likesCounts = likeCommentButtonElement.dataset.likeCounts;
 
-    likeCommentButtonElement.addEventListener("click", (event) => {
+    likeCommentButtonElement.addEventListener('click', (event) => {
       event.stopPropagation();
       if (!persons[index].isLiked) {
         likesCounts++;
@@ -96,11 +96,11 @@ export function initLikeCommentListeners({ persons }) {
 
 // Ответ на комментарий
 export function initReplyToComment({ persons }) {
-  const inputText = document.querySelector(".add-form-text");
+  const inputText = document.querySelector('.add-form-text');
 
-  const commentsBodyElements = document.querySelectorAll(".comment");
+  const commentsBodyElements = document.querySelectorAll('.comment');
   commentsBodyElements.forEach((comment, index) => {
-    comment.addEventListener("click", () => {
+    comment.addEventListener('click', () => {
       inputText.value = `QUOTE_BEGIN ${persons[index].name}: \n ${persons[index].comment} QUOTE_END \n`;
     });
   });
@@ -110,11 +110,10 @@ export function initReplyToComment({ persons }) {
 export function initDeleteLastComentListener({
   persons,
   renderComments,
-  postCommentInfo,
 }) {
-  const deleteButtonElement = document.querySelector(".delete-form-button");
+  const deleteButtonElement = document.querySelector('.delete-form-button');
 
-  deleteButtonElement.addEventListener("click", () => {
+  deleteButtonElement.addEventListener('click', () => {
     persons.pop();
 
     renderComments({ persons });

@@ -1,5 +1,5 @@
 export function renderLoaderGet() {
-  const containerElement = document.querySelector(".list-loader-get");
+  const containerElement = document.querySelector('.list-loader-get');
 
   containerElement.innerHTML = `
   <div class="windows8">
@@ -22,7 +22,7 @@ export function renderLoaderGet() {
 }
 
 export function renderLoaderPost() {
-  const containerElement = document.querySelector(".list-loader-post");
+  const containerElement = document.querySelector('.list-loader-post');
 
   containerElement.innerHTML = `
   <div class="windows8">

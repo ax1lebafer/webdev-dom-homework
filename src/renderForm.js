@@ -1,9 +1,9 @@
-import { initAddCommentListeners } from "./initFunctions.js";
-import { user } from "./main.js";
-import { renderLogin } from "./renderLogin.js";
+import { initAddCommentListeners } from './initFunctions.js';
+import { user } from './main.js';
+import { renderLogin } from './renderLogin.js';
 
 export function renderForm({ persons }) {
-  const formElement = document.querySelector(".form");
+  const formElement = document.querySelector('.form');
 
   formElement.innerHTML = user
     ? `<div class="add-form">
@@ -30,10 +30,10 @@ export function renderForm({ persons }) {
     : `<div class="auth-form">Чтобы оставить комментарий, <button id="auth-button" type="button">авторизуйтесь.</button>
     </div>`;
 
-  const buttonElement = document.querySelector("#auth-button");
+  const buttonElement = document.querySelector('#auth-button');
 
   if (buttonElement) {
-    buttonElement.addEventListener("click", () => {
+    buttonElement.addEventListener('click', () => {
       window.scrollTo(0, 0);
       renderLogin({ persons });
     });
